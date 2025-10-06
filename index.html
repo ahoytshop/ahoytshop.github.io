@@ -7,7 +7,7 @@
   <style>
     @font-face {
       font-family: 'Roboto Flex';
-      src: url('fonts/RobotoFlex.ttf') format('truetype');
+      src: url('fonts/robotoflex.ttf') format('truetype');
       font-weight: 100 900;
       font-stretch: 75% 125%;
       font-style: oblique -10deg 0deg;
@@ -15,7 +15,7 @@
 
     @font-face {
       font-family: 'LeagueMono';
-      src: url('fonts/LeagueMono.woff2') format('woff2');
+      src: url('fonts/leaguemono.woff2') format('woff2');
       font-weight: 400;
       font-style: normal;
     }
@@ -34,9 +34,14 @@
       -webkit-user-select: none;
       -moz-user-select: none;
       -ms-user-select: none;
+      width: 100%;
+      max-width: 100vw;
+    }
+    
+    body {
+      overflow-x: clip;
     }
 
-    /* Apple-style scrollbar */
     ::-webkit-scrollbar {
       width: 10px;
     }
@@ -75,6 +80,8 @@
       position: sticky;
       top: 0;
       height: 100vh;
+      width: 100%;
+      max-width: 100vw;
       background: #000;
       color: #ffffff;
       display: flex;
@@ -82,22 +89,33 @@
       justify-content: center;
       align-items: center;
       text-align: center;
+      overflow: hidden;
     }
 
     h1 {
       font-family: 'Roboto Flex', sans-serif;
-      font-size: 4rem;
+      font-size: clamp(2rem, 8vw, 4rem);
       font-variation-settings: 'wdth' 100, 'XTRA' 600;
       transition: font-variation-settings 0.1s ease;
+      padding: 0 1rem;
     }
 
     p {
       font-family: 'LeagueMono';
+      font-size: clamp(0.875rem, 2vw, 1rem);
     }
 
     #store {
       background: #fff;
       color: #333;
+    }
+
+    iframe {
+      width: 100%;
+      height: 1000px;
+      border: none;
+      pointer-events: auto;
+      display: block;
     }
 
     .scroll-indicator {
@@ -150,8 +168,8 @@
     }
 
     #hero-animation {
-      width: 320px;
-      height: 320px;
+      width: clamp(200px, 50vw, 320px);
+      height: clamp(200px, 50vw, 320px);
       object-fit: contain;
       margin-top: -1.5rem;
       display: block;
@@ -163,6 +181,7 @@
       padding: 2rem;
       text-align: center;
       font-family: 'LeagueMono', monospace;
+      font-size: clamp(0.875rem, 2vw, 1rem);
     }
 
     .contact-btn {
@@ -171,7 +190,7 @@
       border: none;
       padding: 12px 32px;
       font-family: 'LeagueMono', monospace;
-      font-size: 1rem;
+      font-size: clamp(0.875rem, 2vw, 1rem);
       cursor: pointer;
       transition: all 0.2s ease;
       margin-bottom: 1rem;
@@ -190,6 +209,7 @@
       align-items: center;
       gap: 0.5rem;
       transition: opacity 0.2s ease;
+      font-size: clamp(0.875rem, 2vw, 1rem);
     }
 
     .instagram-link:hover {
@@ -213,6 +233,7 @@
       justify-content: center;
       align-items: center;
       z-index: 1000;
+      padding: 1rem;
     }
 
     .modal.active {
@@ -224,7 +245,7 @@
       padding: 2rem;
       border-radius: 8px;
       max-width: 500px;
-      width: 90%;
+      width: 100%;
       position: relative;
     }
 
@@ -243,6 +264,7 @@
       font-family: 'Roboto Flex', sans-serif;
       margin-bottom: 1.5rem;
       color: #000;
+      font-size: clamp(1.5rem, 4vw, 2rem);
     }
 
     .form-group {
@@ -254,6 +276,7 @@
       margin-bottom: 0.5rem;
       font-family: 'LeagueMono', monospace;
       color: #333;
+      font-size: clamp(0.875rem, 2vw, 1rem);
     }
 
     .form-group input,
@@ -262,7 +285,7 @@
       padding: 0.75rem;
       border: 2px solid #ddd;
       font-family: 'LeagueMono', monospace;
-      font-size: 0.9rem;
+      font-size: clamp(0.875rem, 2vw, 0.9rem);
     }
 
     .form-group textarea {
@@ -276,7 +299,7 @@
       border: none;
       padding: 12px 32px;
       font-family: 'LeagueMono', monospace;
-      font-size: 1rem;
+      font-size: clamp(0.875rem, 2vw, 1rem);
       cursor: pointer;
       width: 100%;
       transition: all 0.2s ease;
@@ -285,21 +308,6 @@
     .submit-btn:hover {
       background: #333;
     }
-
-    .iframe-container {
-      width: 100%;
-      height: 1000px;
-      overflow: hidden;
-      position: relative;
-  }
-
-    iframe {
-      width: 100%;
-      height: 100%;
-      border: none;
-      display: block;
-      overflow: hidden;
-  }
   </style>
 </head>
 <body>
@@ -318,9 +326,7 @@
   </div>
 
   <section id="store">
-    <div class="iframe-container">
-      <iframe src="https://ahoyt.printify.me/"></iframe>
-    </div>
+    <iframe src="https://ahoyt.printify.me/" title="Ahoyt Printify Store"></iframe>
   </section>
 
   <footer>
@@ -364,7 +370,6 @@
   </div>
 
   <script>
-    // Force scroll to top on page load
     window.history.scrollRestoration = 'manual';
     window.scrollTo(0, 0);
     
@@ -396,14 +401,12 @@
         heroImage.src = `/images/fry${currentFrame}.png`;
       }
       
-      // Don't trigger snap if already snapping
       if (window.isSnapping) return;
       
       const currentScroll = window.pageYOffset;
       const scrollingDown = currentScroll > (window.lastScrollPos || 0);
       window.lastScrollPos = currentScroll;
       
-      // Only snap on gentle scroll near end
       if (scrollingDown && scrollProgress > 0.88 && scrollProgress < 0.99 && !window.autoSnapTriggered) {
         window.autoSnapTriggered = true;
         window.isSnapping = true;
@@ -432,7 +435,6 @@
     window.addEventListener('scroll', updateAnimation);
     updateAnimation();
 
-    // Hide scroll indicator on scroll
     const scrollIndicator = document.querySelector('.scroll-indicator');
     window.addEventListener('scroll', function() {
       if (window.scrollY > 500) {
@@ -456,7 +458,6 @@
       }
     });
 
-    // Auto-resize iframe
     const iframe = document.querySelector('iframe');
     
     window.addEventListener('message', function(e) {
@@ -477,7 +478,4 @@
   </script>
 
 </body>
-
 </html>
-
-
