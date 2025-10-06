@@ -1,0 +1,471 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Ahoyt Shop</title>
+  <style>
+    @font-face {
+      font-family: 'Roboto Flex';
+      src: url('fonts/robotoflex.ttf') format('truetype');
+      font-weight: 100 900;
+      font-stretch: 75% 125%;
+      font-style: oblique -10deg 0deg;
+    }
+
+    @font-face {
+      font-family: 'LeagueMono';
+      src: url('fonts/leaguemono.woff2') format('woff2');
+      font-weight: 400;
+      font-style: normal;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body, html {
+      margin: 0;
+      padding: 0;
+      font-family: Arial, sans-serif;
+      user-select: none;
+      -webkit-user-select: none;
+      -moz-user-select: none;
+      -ms-user-select: none;
+    }
+
+    /* Apple-style scrollbar */
+    ::-webkit-scrollbar {
+      width: 10px;
+    }
+
+    ::-webkit-scrollbar-track {
+      background: transparent;
+    }
+
+    ::-webkit-scrollbar-thumb {
+      background: rgba(255, 255, 255, 0.3);
+      border-radius: 5px;
+      border: 3px solid rgba(0, 0, 0, 0);
+      background-clip: padding-box;
+    }
+
+    ::-webkit-scrollbar-thumb:hover {
+      background: rgba(255, 255, 255, 0.5);
+      background-clip: padding-box;
+    }
+
+    html {
+      scrollbar-width: thin;
+      scrollbar-color: rgba(255, 255, 255, 0.3) transparent;
+    }
+
+    body.snap-active {
+      overflow: hidden;
+    }
+
+    #hero-wrapper {
+      height: 300vh;
+      position: relative;
+    }
+
+    #hero-content {
+      position: sticky;
+      top: 0;
+      height: 100vh;
+      background: #000;
+      color: #ffffff;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+    }
+
+    h1 {
+      font-family: 'Roboto Flex', sans-serif;
+      font-size: 4rem;
+      font-variation-settings: 'wdth' 100, 'XTRA' 600;
+      transition: font-variation-settings 0.1s ease;
+    }
+
+    p {
+      font-family: 'LeagueMono';
+    }
+
+    #store {
+      background: #fff;
+      color: #333;
+    }
+
+    iframe {
+      width: 100%;
+      height: 3000px;
+      border: none;
+      pointer-events: auto;
+      display: block;
+    }
+
+    .scroll-indicator {
+      position: absolute;
+      bottom: 40px;
+      width: 56px;
+      height: 56px;
+      border: 2px solid rgba(255, 255, 255, 0.5);
+      border-radius: 50%;
+      color: #ffffff;
+      font-size: 28px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      cursor: pointer;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      backdrop-filter: blur(10px);
+      background: rgba(255, 255, 255, 0.1);
+      animation: bounce 2s infinite;
+      line-height: 1;
+      opacity: 1;
+    }
+
+    .scroll-indicator.hidden {
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    .scroll-indicator svg {
+      width: 24px;
+      height: 24px;
+      fill: currentColor;
+    }
+
+    @keyframes bounce {
+      0%, 100% {
+        transform: translateY(0);
+      }
+      50% {
+        transform: translateY(-10px);
+      }
+    }
+
+    .scroll-indicator:hover {
+      background: rgba(255, 255, 255, 1);
+      color: #000;
+      border-color: rgba(255, 255, 255, 1);
+      transform: translateY(5px) scale(1.05);
+      animation: none;
+    }
+
+    #hero-animation {
+      width: 320px;
+      height: 320px;
+      object-fit: contain;
+      margin-top: -1.5rem;
+      display: block;
+    }
+
+    footer {
+      background: #000;
+      color: #fff;
+      padding: 2rem;
+      text-align: center;
+      font-family: 'LeagueMono', monospace;
+    }
+
+    .contact-btn {
+      background: #fff;
+      color: #000;
+      border: none;
+      padding: 12px 32px;
+      font-family: 'LeagueMono', monospace;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      margin-bottom: 1rem;
+    }
+
+    .contact-btn:hover {
+      background: #f0f0f0;
+      transform: translateY(-2px);
+    }
+
+    .instagram-link {
+      color: #fff;
+      text-decoration: none;
+      margin-top: 0.5rem;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      transition: opacity 0.2s ease;
+    }
+
+    .instagram-link:hover {
+      opacity: 0.8;
+    }
+
+    .instagram-icon {
+      width: 20px;
+      height: 20px;
+      fill: currentColor;
+    }
+
+    .modal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.8);
+      justify-content: center;
+      align-items: center;
+      z-index: 1000;
+    }
+
+    .modal.active {
+      display: flex;
+    }
+
+    .modal-content {
+      background: #fff;
+      padding: 2rem;
+      border-radius: 8px;
+      max-width: 500px;
+      width: 90%;
+      position: relative;
+    }
+
+    .close-modal {
+      position: absolute;
+      top: 1rem;
+      right: 1rem;
+      background: none;
+      border: none;
+      font-size: 1.5rem;
+      cursor: pointer;
+      color: #333;
+    }
+
+    .modal-content h2 {
+      font-family: 'Roboto Flex', sans-serif;
+      margin-bottom: 1.5rem;
+      color: #000;
+    }
+
+    .form-group {
+      margin-bottom: 1rem;
+    }
+
+    .form-group label {
+      display: block;
+      margin-bottom: 0.5rem;
+      font-family: 'LeagueMono', monospace;
+      color: #333;
+    }
+
+    .form-group input,
+    .form-group textarea {
+      width: 100%;
+      padding: 0.75rem;
+      border: 2px solid #ddd;
+      font-family: 'LeagueMono', monospace;
+      font-size: 0.9rem;
+    }
+
+    .form-group textarea {
+      resize: vertical;
+      min-height: 120px;
+    }
+
+    .submit-btn {
+      background: #000;
+      color: #fff;
+      border: none;
+      padding: 12px 32px;
+      font-family: 'LeagueMono', monospace;
+      font-size: 1rem;
+      cursor: pointer;
+      width: 100%;
+      transition: all 0.2s ease;
+    }
+
+    .submit-btn:hover {
+      background: #333;
+    }
+  </style>
+</head>
+<body>
+
+  <div id="hero-wrapper">
+    <div id="hero-content">
+      <p>the refurbished</p>
+      <h1 id="hero-title">AHOYT.SHOP</h1>
+      <img id="hero-animation" src="/images/fry1.png" alt="Hero Animation">
+      <div class="scroll-indicator" onclick="scrollToStore()">
+        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+          <path d="M12 16l-6-6h12z"/>
+        </svg>
+      </div>
+    </div>
+  </div>
+
+  <section id="store">
+    <iframe src="https://ahoyt.printify.me/" title="Ahoyt Printify Store"></iframe>
+  </section>
+
+  <footer>
+    <button class="contact-btn" onclick="openModal()">CONTACT</button>
+    <div>
+      <span>or, </span>
+      <a href="https://instagram.com/ahoyt.shop" target="_blank" class="instagram-link">
+        DM us on Instagram
+        <svg class="instagram-icon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+          <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/>
+        </svg>
+      </a>
+    </div>
+  </footer>
+
+  <div id="contact-modal" class="modal">
+    <div class="modal-content">
+      <button class="close-modal" onclick="closeModal()">×</button>
+      <h2>Get in Touch</h2>
+      <form action="https://api.web3forms.com/submit" method="POST">
+        <input type="hidden" name="access_key" value="YOUR_ACCESS_KEY_HERE">
+        
+        <div class="form-group">
+          <label for="name">Name</label>
+          <input type="text" id="name" name="name" required>
+        </div>
+        
+        <div class="form-group">
+          <label for="email">Email</label>
+          <input type="email" id="email" name="email" required>
+        </div>
+        
+        <div class="form-group">
+          <label for="message">Message</label>
+          <textarea id="message" name="message" required></textarea>
+        </div>
+        
+        <button type="submit" class="submit-btn">SEND MESSAGE</button>
+      </form>
+    </div>
+  </div>
+
+  <script>
+    // Force scroll to top on page load
+    window.history.scrollRestoration = 'manual';
+    window.scrollTo(0, 0);
+    
+    function scrollToStore() {
+      document.getElementById('store').scrollIntoView({ behavior: 'smooth' });
+    }
+
+    const heroImage = document.getElementById('hero-animation');
+    const heroWrapper = document.getElementById('hero-wrapper');
+    const heroTitle = document.getElementById('hero-title');
+    const totalFrames = 9;
+    let currentFrame = 1;
+
+    function updateAnimation() {
+      const rect = heroWrapper.getBoundingClientRect();
+      const wrapperHeight = heroWrapper.offsetHeight;
+      const viewportHeight = window.innerHeight;
+      const scrolled = -rect.top;
+
+      const scrollProgress = Math.max(0, Math.min(1, scrolled / (wrapperHeight - viewportHeight)));
+      const targetFrame = Math.floor(scrollProgress * (totalFrames - 1)) + 1;
+      const clampedFrame = Math.max(1, Math.min(totalFrames, targetFrame));
+
+      const fontWidth = 75 + (scrollProgress * 50);
+      heroTitle.style.fontVariationSettings = `'wdth' ${fontWidth}, 'XTRA' 600`;
+
+      if (clampedFrame !== currentFrame) {
+        currentFrame = clampedFrame;
+        heroImage.src = `/images/fry${currentFrame}.png`;
+      }
+      
+      // Don't trigger snap if already snapping
+      if (window.isSnapping) return;
+      
+      const currentScroll = window.pageYOffset;
+      const scrollingDown = currentScroll > (window.lastScrollPos || 0);
+      window.lastScrollPos = currentScroll;
+      
+      // Only snap on gentle scroll near end
+      if (scrollingDown && scrollProgress > 0.88 && scrollProgress < 0.99 && !window.autoSnapTriggered) {
+        window.autoSnapTriggered = true;
+        window.isSnapping = true;
+        
+        document.body.classList.add('snap-active');
+        
+        setTimeout(() => {
+          const storeSection = document.getElementById('store');
+          window.scrollTo({
+            top: storeSection.offsetTop,
+            behavior: 'smooth'
+          });
+          
+          setTimeout(() => {
+            document.body.classList.remove('snap-active');
+            window.isSnapping = false;
+          }, 800);
+        }, 50);
+      }
+      
+      if (scrollProgress < 0.75) {
+        window.autoSnapTriggered = false;
+      }
+    }
+
+    window.addEventListener('scroll', updateAnimation);
+    updateAnimation();
+
+    // Hide scroll indicator on scroll
+    const scrollIndicator = document.querySelector('.scroll-indicator');
+    window.addEventListener('scroll', function() {
+      if (window.scrollY > 500) {
+        scrollIndicator.classList.add('hidden');
+      } else {
+        scrollIndicator.classList.remove('hidden');
+      }
+    });
+
+    function openModal() {
+      document.getElementById('contact-modal').classList.add('active');
+    }
+
+    function closeModal() {
+      document.getElementById('contact-modal').classList.remove('active');
+    }
+
+    document.getElementById('contact-modal').addEventListener('click', function(e) {
+      if (e.target === this) {
+        closeModal();
+      }
+    });
+
+    // Auto-resize iframe
+    const iframe = document.querySelector('iframe');
+    
+    window.addEventListener('message', function(e) {
+      if (e.data.height) {
+        iframe.style.height = e.data.height + 'px';
+      }
+    });
+
+    iframe.addEventListener('load', function() {
+      try {
+        const iframeDoc = iframe.contentDocument || iframe.contentWindow.document;
+        const height = iframeDoc.body.scrollHeight;
+        iframe.style.height = height + 'px';
+      } catch (e) {
+        console.log('Cannot auto-resize cross-origin iframe');
+      }
+    });
+  </script>
+
+</body>
+</html>
