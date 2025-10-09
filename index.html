@@ -71,6 +71,48 @@
       overflow: hidden;
     }
 
+    .banner-container {
+      background: #000;
+      color: #fff;
+      overflow: hidden;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      z-index: 9999;
+      padding: 8px 0;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.3);
+    }
+
+    .banner-content {
+      display: flex;
+      white-space: nowrap;
+      animation: scroll 30s linear infinite;
+    }
+
+    .banner-text {
+      display: inline-block;
+      padding: 0 50px;
+      font-size: 14px;
+      font-weight: 500;
+      letter-spacing: 0.5px;
+      font-family: 'LeagueMono', monospace;
+
+    }
+
+    @keyframes scroll {
+      0% {
+        transform: translateX(0);
+      }
+      100% {
+        transform: translateX(-50%);
+      }
+    }
+
+    .banner-container:hover .banner-content {
+      animation-play-state: paused;
+    }
+
     #hero-wrapper {
       height: 300vh;
       position: relative;
@@ -108,19 +150,21 @@
     #store {
       background: #fff;
       color: #333;
+      overflow: visible;
     }
 
     iframe {
       width: 100%;
-      height: 1000px;
+      height: 100vh; 
       border: none;
-      pointer-events: auto;
       display: block;
+      pointer-events: auto;
+      overflow-y: auto; 
     }
 
     .scroll-indicator {
       position: absolute;
-      bottom: 40px;
+      bottom: 80px;
       width: 56px;
       height: 56px;
       border: 2px solid rgba(255, 255, 255, 0.5);
@@ -175,29 +219,23 @@
       display: block;
     }
 
-    footer {
-      background: #000;
-      color: #fff;
-      padding: 2rem;
-      text-align: center;
-      font-family: 'LeagueMono', monospace;
-      font-size: clamp(0.875rem, 2vw, 1rem);
-    }
 
     .contact-btn {
-      background: #fff;
-      color: #000;
+      position: absolute;
+      bottom: 20px;
+      background: #000000;
+      color: #ffffff;
       border: none;
       padding: 12px 32px;
       font-family: 'LeagueMono', monospace;
       font-size: clamp(0.875rem, 2vw, 1rem);
       cursor: pointer;
       transition: all 0.2s ease;
-      margin-bottom: 1rem;
     }
 
     .contact-btn:hover {
       background: #f0f0f0;
+      color: #000000;
       transform: translateY(-2px);
     }
 
@@ -311,12 +349,19 @@
   </style>
 </head>
 <body>
+  <div class="banner-container">
+    <div class="banner-content">
+      <span class="banner-text">⚠️ THIS SITE AND ITS PRODUCTS ARE PARODY AND SATIRE. WE ARE NOT AFFILIATED WITH, ENDORSED BY, OR CONNECTED IN ANY WAY TO JOSHUA BLOCK, WORLDOFTSHIRTS, OR ANY OF HIS AHOYT MERCHANDISE OR BRANDS.</span>
+      <span class="banner-text">⚠️ THIS SITE AND ITS PRODUCTS ARE PARODY AND SATIRE. WE ARE NOT AFFILIATED WITH, ENDORSED BY, OR CONNECTED IN ANY WAY TO JOSHUA BLOCK, WORLDOFTSHIRTS, OR ANY OF HIS AHOYT MERCHANDISE OR BRANDS.</span>
+    </div>
+  </div>
 
   <div id="hero-wrapper">
     <div id="hero-content">
       <p>the refurbished</p>
       <h1 id="hero-title">AHOYT.SHOP</h1>
       <img id="hero-animation" src="/images/fry1.png" alt="Hero Animation">
+      <button class="contact-btn" onclick="openModal()">CONTACT</button>
       <div class="scroll-indicator" onclick="scrollToStore()">
         <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
           <path d="M12 16l-6-6h12z"/>
@@ -328,19 +373,6 @@
   <section id="store">
     <iframe src="https://ahoyt.printify.me/" title="Ahoyt Printify Store"></iframe>
   </section>
-
-  <footer>
-    <button class="contact-btn" onclick="openModal()">CONTACT</button>
-    <div>
-      <span>or, </span>
-      <a href="https://instagram.com/ahoyt.shop" target="_blank" class="instagram-link">
-        DM us on Instagram
-        <svg class="instagram-icon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-          <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/>
-        </svg>
-      </a>
-    </div>
-  </footer>
 
   <div id="contact-modal" class="modal">
     <div class="modal-content">
@@ -366,6 +398,12 @@
         
         <button type="submit" class="submit-btn">SEND MESSAGE</button>
       </form>
+      <a href="https://instagram.com/yourusername" target="_blank" class="instagram-link">
+        <svg class="instagram-icon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+          <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/>
+        </svg>
+        @yourusername
+      </a>
     </div>
   </div>
 
@@ -479,4 +517,3 @@
 
 </body>
 </html>
-
